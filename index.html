@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กินอะไรดี</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAF8;
+            --surface: #FFFFFF;
+            --border: #EBEBEB;
+            --text: #1A1A1A;
+            --muted: #9A9A9A;
+            --accent-light: #F0F0EE;
+            --green: #2D6A4F;
+            --green-bg: #F0F7F4;
+            --green-border: #C8E6C9;
+            --red: #C0392B;
+            --red-bg: #FDF2F1;
+            --radius: 14px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .app {
+            max-width: 420px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .topbar {
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .topbar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .logo span {
+            color: var(--muted);
+            font-weight: 300;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .user-badge strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 0;
+            font-family: inherit;
+            transition: color .2s;
+        }
+
+        .logout-btn:hover {
+            color: var(--text);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            padding: 0 20px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 0;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all .2s;
+            font-weight: 400;
+        }
+
+        .tab.active {
+            color: var(--text);
+            border-bottom-color: var(--text);
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content {
+            padding: 24px 20px;
+            flex: 1;
+        }
+
+        /* Auth */
+        .auth-wrap {
+            padding: 40px 20px 20px;
+        }
+
+        .auth-title {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .auth-sub {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: var(--accent-light);
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            margin-bottom: 28px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 9px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all .2s;
+            font-weight: 400;
+        }
+
+        .auth-tab.active {
+            background: var(--surface);
+            color: var(--text);
+            font-weight: 600;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+        }
+
+        /* Form */
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 6px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 15px;
+            background: var(--surface);
+            color: var(--text);
+            outline: none;
+            transition: border-color .2s;
+            -webkit-appearance: none;
+        }
+
+        input:focus {
+            border-color: var(--text);
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            color: var(--muted);
+            padding: 4px;
+        }
+
+        /* Select */
+        /* Custom Dropdown */
+        .custom-select {
+            position: relative;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            padding: 15px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Sarabun', sans-serif;
+            font-size: 16px;
+            background: var(--surface);
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            transition: border-color .2s;
+        }
+
+        .custom-select-trigger.selected {
+            color: var(--text);
+        }
+
+        .custom-select-trigger.open {
+            border-color: var(--text);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-color: var(--border);
+        }
+
+        .custom-select-trigger .arrow {
+            font-size: 11px;
+            color: var(--muted);
+            transition: transform .2s;
+            flex-shrink: 0;
+        }
+
+        .custom-select-trigger.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-options {
+            display: none;
+            border: 1.5px solid var(--text);
+            border-top: none;
+            border-bottom-left-radius: var(--radius-sm);
+            border-bottom-right-radius: var(--radius-sm);
+            background: var(--surface);
+            overflow: hidden;
+        }
+
+        .custom-select-options.open {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 14px 16px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-top: 1px solid var(--border);
+            transition: background .15s;
+            color: var(--text);
+        }
+
+        .custom-option:first-child {
+            border-top: none;
+        }
+
+        .custom-option:active {
+            background: var(--accent-light);
+        }
+
+        .custom-option:hover {
+            background: var(--accent-light);
+        }
+
+        .custom-option.active {
+            font-weight: 600;
+            background: var(--accent-light);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .btn:active {
+            transform: scale(.98);
+        }
+
+        .btn-dark {
+            background: var(--text);
+            color: white;
+        }
+
+        .btn-dark:hover {
+            background: #333;
+        }
+
+        .btn-ghost {
+            background: var(--accent-light);
+            color: var(--text);
+        }
+
+        .btn-ghost:hover {
+            background: #E5E5E3;
+        }
+
+        .btn-green {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .btn-red {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .btn-roll {
+            background: var(--text);
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border-radius: var(--radius);
+            margin-top: 4px;
+        }
+
+        .btn-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        /* Food Card */
+        .food-card {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            margin-top: 20px;
+            animation: fadeUp .3s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .food-name {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .nutrition-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .nut-box {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .nut-label {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            margin-bottom: 3px;
+        }
+
+        .nut-val {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        /* History */
+        .history-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .h-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .h-cal {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .h-time {
+            font-size: 11px;
+            color: #C0C0C0;
+            margin-top: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--muted);
+            padding: 48px 0;
+            font-size: 14px;
+        }
+
+        .empty-state .icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Success */
+        .success-card {
+            background: var(--green-bg);
+            border: 1.5px solid var(--green-border);
+            border-radius: var(--radius);
+            padding: 28px 22px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeUp .3s ease;
+        }
+
+        .success-card .check {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .success-card p {
+            color: var(--green);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            font-family: inherit;
+            color: var(--muted);
+            font-size: 13px;
+            cursor: pointer;
+            padding: 8px 0;
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 8px;
+            transition: color .2s;
+        }
+
+        .clear-btn:hover {
+            color: var(--red);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+
+        <!-- AUTH -->
+        <div id="authScreen">
+            <div class="auth-wrap">
+                <div class="auth-title">กินอะไรดี? 🍽️</div>
+                <div class="auth-sub">เข้าสู่ระบบเพื่อบันทึกประวัติการกิน</div>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="showLogin()">เข้าสู่ระบบ</button>
+                    <button class="auth-tab" onclick="showRegister()">สมัครสมาชิก</button>
+                </div>
+
+                <div id="loginForm">
+                    <div class="field">
+                        <label>ชื่อผู้ใช้</label>
+                        <input type="text" id="loginUsername" placeholder="username" autocomplete="username">
+                    </div>
+                    <div class="field">
+                        <label>รหัสผ่าน</label>
+                        <div class="input-wrap">
+                            <input type="password" id="loginPassword" placeholder="password"
+                                autocomplete="current-password">
+                            <button class="eye-btn" type="button" onclick="togglePw('loginPassword',this)">👁</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-dark" onclick="login()">เข้าสู่ระบบ</button>
+                </div>
+
+                <div id="registerForm" class="hidden">
+                    <div class="field">
+                        <label>ชื่อผู้ใช้</label>
+                        <input type="text" id="registerUsername" placeholder="username" autocomplete="username">
+                    </div>
+                    <div class="field">
+                        <label>รหัสผ่าน</label>
+                        <div class="input-wrap">
+                            <input type="password" id="registerPassword" placeholder="password"
+                                autocomplete="new-password">
+                            <button class="eye-btn" type="button"
+                                onclick="togglePw('registerPassword',this)">👁</button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>ยืนยันรหัสผ่าน</label>
+                        <div class="input-wrap">
+                            <input type="password" id="registerConfirmPassword" placeholder="confirm password"
+                                autocomplete="new-password">
+                            <button class="eye-btn" type="button"
+                                onclick="togglePw('registerConfirmPassword',this)">👁</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-dark" onclick="register()">สมัครสมาชิก</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN -->
+        <div id="mainScreen" class="hidden">
+            <div class="topbar">
+                <div class="topbar-inner">
+                    <div class="logo">กินอะไรดี <span>🍽️</span></div>
+                    <div class="user-badge">
+                        <strong id="currentUsername"></strong>
+                        <button class="logout-btn" onclick="logout()">ออก</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showMainTab(this)">สุ่มเมนู</button>
+                <button class="tab" onclick="showHistoryTab(this)">ประวัติ</button>
+            </div>
+
+            <div id="mainTab" class="content">
+                <div class="field" style="margin-bottom:12px">
+                    <label>ประเภทอาหาร</label>
+                    <div class="custom-select" id="cravingDropdown">
+                        <div class="custom-select-trigger" id="cravingTrigger" onclick="toggleDropdown()">
+                            <span id="cravingLabel">เลือกประเภท</span>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div class="custom-select-options" id="cravingOptions">
+                            <div class="custom-option" data-value="ข้าว" onclick="selectOption(this)">ข้าว</div>
+                            <div class="custom-option" data-value="ก๋วยเตี๋ยว" onclick="selectOption(this)">ก๋วยเตี๋ยว
+                            </div>
+                            <div class="custom-option" data-value="อาหารตามสั่ง" onclick="selectOption(this)">
+                                อาหารตามสั่ง</div>
+                            <div class="custom-option" data-value="สลัด" onclick="selectOption(this)">สลัด</div>
+                            <div class="custom-option" data-value="อาหารญี่ปุ่น" onclick="selectOption(this)">
+                                อาหารญี่ปุ่น</div>
+                            <div class="custom-option" data-value="อาหารฟาสต์ฟู้ด" onclick="selectOption(this)">
+                                ฟาสต์ฟู้ด</div>
+                            <div class="custom-option" data-value="สุ่มทั้งหมด" onclick="selectOption(this)">สุ่มเลย! 🎰
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="cravingSelect" value="">
+                </div>
+
+                <button class="btn btn-roll" onclick="randomFood()">🎲 สุ่มเมนู</button>
+
+                <div id="foodResult"></div>
+            </div>
+
+            <div id="historyTab" class="content hidden">
+                <div id="historyList"></div>
+                <button class="clear-btn" onclick="clearHistory()">ล้างประวัติทั้งหมด</button>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        const foodDatabase = {
+
+            "ข้าว": [
+                { "name": "ข้าวผัดกะเพรา", "calories": 450, "protein": 25, "carbs": 55, "fat": 15 },
+                { "name": "ข้าวผัดต้มยำ", "calories": 420, "protein": 20, "carbs": 58, "fat": 12 },
+                { "name": "ข้าวหน้าไก่ทอด", "calories": 550, "protein": 30, "carbs": 60, "fat": 20 },
+                { "name": "ข้าวมันไก่", "calories": 520, "protein": 35, "carbs": 52, "fat": 18 },
+                { "name": "ข้าวผัดอเมริกัน", "calories": 480, "protein": 22, "carbs": 62, "fat": 16 },
+                { "name": "ข้าวหมูแดง", "calories": 490, "protein": 28, "carbs": 56, "fat": 17 },
+                { "name": "ข้าวขาหมู", "calories": 580, "protein": 25, "carbs": 50, "fat": 30 },
+                { "name": "ข้าวหมูกรอบ", "calories": 620, "protein": 22, "carbs": 55, "fat": 35 },
+                { "name": "ข้าวคลุกกะปิ", "calories": 410, "protein": 18, "carbs": 60, "fat": 14 },
+                { "name": "ข้าวไข่เจียวหมูสับ", "calories": 440, "protein": 15, "carbs": 45, "fat": 22 },
+                { "name": "ข้าวหน้าเป็ด", "calories": 510, "protein": 26, "carbs": 54, "fat": 20 },
+                { "name": "ข้าวผัดปู", "calories": 430, "protein": 24, "carbs": 58, "fat": 10 },
+                { "name": "ข้าวเนื้อทอดกระเทียม", "calories": 530, "protein": 28, "carbs": 52, "fat": 22 },
+                { "name": "ข้าวผัดรถไฟ", "calories": 450, "protein": 20, "carbs": 65, "fat": 12 },
+                { "name": "ข้าวอบกุนเชียง", "calories": 490, "protein": 18, "carbs": 68, "fat": 16 },
+                { "name": "ข้าวยำปักษ์ใต้", "calories": 320, "protein": 10, "carbs": 55, "fat": 8 },
+                { "name": "ข้าวแมว (ข้าวผัดปลาทู)", "calories": 380, "protein": 22, "carbs": 48, "fat": 12 },
+                { "name": "ข้าวหน้าแกงกะหรี่ไก่", "calories": 560, "protein": 25, "carbs": 70, "fat": 18 },
+                { "name": "ข้าวผัดคะน้าปลาเค็ม", "calories": 460, "protein": 18, "carbs": 60, "fat": 16 },
+                { "name": "ข้าวเหนียวหมูปิ้ง", "calories": 480, "protein": 24, "carbs": 50, "fat": 20 }
+            ],
+            "ก๋วยเตี๋ยว": [
+                { "name": "ก๋วยเตี๋ยวหมูน้ำใส", "calories": 320, "protein": 18, "carbs": 45, "fat": 8 },
+                { "name": "ก๋วยเตี๋ยวต้มยำ", "calories": 350, "protein": 20, "carbs": 48, "fat": 10 },
+                { "name": "ก๋วยเตี๋ยวเนื้อ", "calories": 380, "protein": 25, "carbs": 46, "fat": 12 },
+                { "name": "บะหมี่หมูแดง", "calories": 400, "protein": 22, "carbs": 50, "fat": 14 },
+                { "name": "เย็นตาโฟ", "calories": 280, "protein": 15, "carbs": 42, "fat": 6 },
+                { "name": "ก๋วยเตี๋ยวเรือ", "calories": 420, "protein": 24, "carbs": 48, "fat": 15 },
+                { "name": "ผัดไทยกุ้งสด", "calories": 520, "protein": 22, "carbs": 70, "fat": 20 },
+                { "name": "ขนมจีนน้ำยาปลา", "calories": 330, "protein": 18, "carbs": 55, "fat": 8 },
+                { "name": "ก๋วยจั๊บน้ำข้น", "calories": 450, "protein": 25, "carbs": 48, "fat": 20 },
+                { "name": "ราเมงข้อสอบ", "calories": 580, "protein": 28, "carbs": 65, "fat": 22 },
+                { "name": "ก๋วยเตี๋ยวคั่วไก่", "calories": 490, "protein": 22, "carbs": 58, "fat": 18 },
+                { "name": "บะหมี่เป็ดย่าง", "calories": 430, "protein": 26, "carbs": 52, "fat": 15 },
+                { "name": "เส้นหมี่ลูกชิ้นเนื้อ", "calories": 310, "protein": 20, "carbs": 44, "fat": 7 },
+                { "name": "เส้นใหญ่ผัดขี้เมา", "calories": 500, "protein": 22, "carbs": 62, "fat": 18 },
+                { "name": "สุกี้น้ำรวมมิตร", "calories": 250, "protein": 28, "carbs": 20, "fat": 6 },
+                { "name": "สุกี้แห้งไก่", "calories": 420, "protein": 26, "carbs": 45, "fat": 14 },
+                { "name": "ก๋วยเตี๋ยวต้มยำไข่หวาน", "calories": 480, "protein": 24, "carbs": 55, "fat": 16 },
+                { "name": "ข้าวซอยไก่", "calories": 540, "protein": 28, "carbs": 60, "fat": 22 },
+                { "name": "หมี่กรอบราดหน้า", "calories": 590, "protein": 20, "carbs": 75, "fat": 25 },
+                { "name": "ก๋วยเตี๋ยวลุยสวน", "calories": 280, "protein": 18, "carbs": 40, "fat": 6 }
+            ],
+            "อาหารตามสั่ง": [
+                { "name": "ผัดกะเพรา", "calories": 380, "protein": 28, "carbs": 35, "fat": 15 },
+                { "name": "ผัดซีอิ๊ว", "calories": 420, "protein": 20, "carbs": 55, "fat": 12 },
+                { "name": "ผัดขิง", "calories": 350, "protein": 25, "carbs": 30, "fat": 14 },
+                { "name": "ผัดพริกแกง", "calories": 400, "protein": 26, "carbs": 32, "fat": 18 },
+                { "name": "ราดหน้า", "calories": 450, "protein": 22, "carbs": 58, "fat": 14 },
+                { "name": "ไข่เจียวฟู", "calories": 380, "protein": 12, "carbs": 10, "fat": 32 },
+                { "name": "ต้มยำกุ้งน้ำข้น", "calories": 250, "protein": 24, "carbs": 15, "fat": 12 },
+                { "name": "แกงเขียวหวานไก่", "calories": 450, "protein": 22, "carbs": 18, "fat": 35 },
+                { "name": "หมูกรอบผัดพริกเกลือ", "calories": 520, "protein": 20, "carbs": 12, "fat": 45 },
+                { "name": "ผัดพริกเผาหมูกรอบ", "calories": 550, "protein": 18, "carbs": 25, "fat": 42 },
+                { "name": "คะน้าหมูกรอบ", "calories": 480, "protein": 18, "carbs": 14, "fat": 38 },
+                { "name": "แกงจืดเต้าหู้หมูสับ", "calories": 150, "protein": 15, "carbs": 8, "fat": 6 },
+                { "name": "ผัดผักบุ้งไฟแดง", "calories": 180, "protein": 6, "carbs": 12, "fat": 12 },
+                { "name": "ปลาหมึกผัดไข่เค็ม", "calories": 460, "protein": 28, "carbs": 15, "fat": 28 },
+                { "name": "กุ้งทอดกระเทียม", "calories": 390, "protein": 26, "carbs": 10, "fat": 26 },
+                { "name": "ไก่ผัดเม็ดมะม่วง", "calories": 490, "protein": 24, "carbs": 28, "fat": 30 },
+                { "name": "ลาบหมู", "calories": 220, "protein": 30, "carbs": 8, "fat": 12 },
+                { "name": "ยำวุ้นเส้นรวมมิตร", "calories": 260, "protein": 20, "carbs": 35, "fat": 6 },
+                { "name": "ทอดมันกุ้ง", "calories": 350, "protein": 18, "carbs": 22, "fat": 22 },
+                { "name": "ต้มแซ่บกระดูกอ่อน", "calories": 240, "protein": 26, "carbs": 10, "fat": 12 }
+            ],
+            "สลัด": [
+                { "name": "สลัดไก่ย่าง", "calories": 280, "protein": 32, "carbs": 20, "fat": 8 },
+                { "name": "สลัดผักรวม", "calories": 180, "protein": 8, "carbs": 25, "fat": 6 },
+                { "name": "สลัดซีซาร์", "calories": 320, "protein": 22, "carbs": 18, "fat": 18 },
+                { "name": "สลัดทูน่า", "calories": 250, "protein": 28, "carbs": 15, "fat": 10 },
+                { "name": "สลัดไข่ต้ม", "calories": 210, "protein": 16, "carbs": 18, "fat": 9 },
+                { "name": "สลัดแซลมอนรมควัน", "calories": 310, "protein": 26, "carbs": 12, "fat": 16 },
+                { "name": "สลัดกุ้งย่าง", "calories": 240, "protein": 25, "carbs": 15, "fat": 8 },
+                { "name": "สลัดอกไก่ควินัว", "calories": 340, "protein": 35, "carbs": 30, "fat": 10 },
+                { "name": "สลัดอะโวคาโด", "calories": 380, "protein": 6, "carbs": 22, "fat": 32 },
+                { "name": "สลัดพาสต้า", "calories": 410, "protein": 14, "carbs": 55, "fat": 15 },
+                { "name": "สลัดผลไม้รวม", "calories": 160, "protein": 4, "carbs": 38, "fat": 2 },
+                { "name": "สลัดเต้าหู้ย่าง", "calories": 220, "protein": 18, "carbs": 20, "fat": 10 },
+                { "name": "สลัดเนื้อย่าง", "calories": 350, "protein": 32, "carbs": 15, "fat": 18 },
+                { "name": "สลัดญี่ปุ่น (งาดำ)", "calories": 260, "protein": 12, "carbs": 20, "fat": 14 },
+                { "name": "สลัดปูอัด", "calories": 190, "protein": 10, "carbs": 22, "fat": 7 },
+                { "name": "สลัดวอลนัทแอปเปิ้ล", "calories": 310, "protein": 8, "carbs": 35, "fat": 18 },
+                { "name": "สลัดกรีก", "calories": 280, "protein": 12, "carbs": 15, "fat": 22 },
+                { "name": "สลัดมันฝรั่ง", "calories": 360, "protein": 6, "carbs": 48, "fat": 16 },
+                { "name": "สลัดถั่วรวม", "calories": 290, "protein": 15, "carbs": 40, "fat": 8 },
+                { "name": "สลัดคอหมูย่าง", "calories": 420, "protein": 24, "carbs": 18, "fat": 28 }
+            ],
+            "อาหารญี่ปุ่น": [
+                { "name": "ข้าวหน้าแซลมอน", "calories": 480, "protein": 30, "carbs": 55, "fat": 15 },
+                { "name": "ราเมง", "calories": 520, "protein": 25, "carbs": 68, "fat": 18 },
+                { "name": "เทมปุระข้าว", "calories": 550, "protein": 22, "carbs": 65, "fat": 22 },
+                { "name": "ข้าวหน้าไก่เทอริยากิ", "calories": 460, "protein": 32, "carbs": 58, "fat": 12 },
+                { "name": "ทงคัตสึ", "calories": 620, "protein": 35, "carbs": 62, "fat": 26 },
+                { "name": "ซูชิรวม", "calories": 380, "protein": 20, "carbs": 60, "fat": 8 },
+                { "name": "ข้าวหน้าปลาไหล", "calories": 580, "protein": 28, "carbs": 65, "fat": 22 },
+                { "name": "อุด้งแกงกะหรี่", "calories": 550, "protein": 20, "carbs": 75, "fat": 16 },
+                { "name": "ข้าวหน้าเนื้อ", "calories": 540, "protein": 28, "carbs": 60, "fat": 20 },
+                { "name": "ทาโกยากิ", "calories": 320, "protein": 12, "carbs": 45, "fat": 12 },
+                { "name": "โซบะเย็น", "calories": 290, "protein": 10, "carbs": 60, "fat": 2 },
+                { "name": "เกี๊ยวซ่า", "calories": 240, "protein": 12, "carbs": 30, "fat": 10 },
+                { "name": "ข้าวหน้ากุ้งเทมปุระ", "calories": 590, "protein": 22, "carbs": 72, "fat": 24 },
+                { "name": "ซาซิมิแซลมอน", "calories": 180, "protein": 25, "carbs": 0, "fat": 10 },
+                { "name": "ข้าวหน้าหมูคุโรบูตะ", "calories": 520, "protein": 28, "carbs": 58, "fat": 18 },
+                { "name": "โอโคโนมิยากิ", "calories": 450, "protein": 18, "carbs": 55, "fat": 18 },
+                { "name": "ยากิโซบะ", "calories": 480, "protein": 15, "carbs": 65, "fat": 16 },
+                { "name": "มิโซะราเมง", "calories": 510, "protein": 22, "carbs": 60, "fat": 18 },
+                { "name": "สเต็กเนื้อวากิว", "calories": 650, "protein": 40, "carbs": 5, "fat": 48 },
+                { "name": "หัวปลาต้มซีอิ๊ว", "calories": 350, "protein": 30, "carbs": 10, "fat": 20 }
+            ],
+            "อาหารฟาสต์ฟู้ด": [
+                { "name": "เบอร์เกอร์ไก่", "calories": 520, "protein": 28, "carbs": 48, "fat": 24 },
+                { "name": "พิซซ่าชีส", "calories": 680, "protein": 25, "carbs": 72, "fat": 32 },
+                { "name": "แซนด์วิชแฮม", "calories": 380, "protein": 20, "carbs": 42, "fat": 15 },
+                { "name": "ไก่ทอด", "calories": 620, "protein": 35, "carbs": 45, "fat": 32 },
+                { "name": "ฟิชแอนด์ชิปส์", "calories": 580, "protein": 28, "carbs": 55, "fat": 28 },
+                { "name": "ฮอทดอก", "calories": 350, "protein": 15, "carbs": 28, "fat": 20 },
+                { "name": "เฟรนช์ฟรายส์", "calories": 450, "protein": 5, "carbs": 60, "fat": 22 },
+                { "name": "นักเก็ตไก่", "calories": 310, "protein": 15, "carbs": 20, "fat": 18 },
+                { "name": "ทาโก้เนื้อ", "calories": 420, "protein": 22, "carbs": 35, "fat": 22 },
+                { "name": "เคบับไก่", "calories": 480, "protein": 28, "carbs": 45, "fat": 18 },
+                { "name": "สเต็กหมู", "calories": 550, "protein": 35, "carbs": 15, "fat": 38 },
+                { "name": "สปาเก็ตตี้คาโบนาร่า", "calories": 620, "protein": 20, "carbs": 65, "fat": 32 },
+                { "name": "ปีกไก่บัฟฟาโล", "calories": 480, "protein": 32, "carbs": 5, "fat": 36 },
+                { "name": "ลาซานญ่าเนื้อ", "calories": 720, "protein": 35, "carbs": 55, "fat": 40 },
+                { "name": "เบอร์เกอร์ปลา", "calories": 440, "protein": 20, "carbs": 45, "fat": 18 },
+                { "name": "หัวหอมทอด", "calories": 380, "protein": 4, "carbs": 42, "fat": 22 },
+                { "name": "คอร์นด็อก", "calories": 320, "protein": 10, "carbs": 35, "fat": 18 },
+                { "name": "มักกะโรนีชีส", "calories": 580, "protein": 18, "carbs": 62, "fat": 28 },
+                { "name": "เควซาดีญ่าไก่", "calories": 520, "protein": 28, "carbs": 40, "fat": 24 },
+                { "name": "เบอร์เกอร์เนื้อคู่", "calories": 850, "protein": 45, "carbs": 48, "fat": 52 }
+            ]
+
+        };
+
+        let currentUser = null, foodHistory = [];
+
+        function togglePw(id, btn) {
+            const inp = document.getElementById(id);
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+            btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.querySelectorAll('.auth-tab')[0].classList.add('active');
+            document.querySelectorAll('.auth-tab')[1].classList.remove('active');
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.querySelectorAll('.auth-tab')[0].classList.remove('active');
+            document.querySelectorAll('.auth-tab')[1].classList.add('active');
+        }
+
+        function register() {
+            const u = document.getElementById('registerUsername').value.trim();
+            const p = document.getElementById('registerPassword').value;
+            const c = document.getElementById('registerConfirmPassword').value;
+            if (!u || !p) return alert('กรุณากรอกข้อมูลให้ครบ');
+            if (p !== c) return alert('รหัสผ่านไม่ตรงกัน');
+            if (localStorage.getItem(`user_${u}`)) return alert('ชื่อผู้ใช้นี้มีอยู่แล้ว');
+            localStorage.setItem(`user_${u}`, JSON.stringify({ username: u, password: p }));
+            alert('สมัครสำเร็จ!');
+            showLogin();
+            ['registerUsername', 'registerPassword', 'registerConfirmPassword'].forEach(id => document.getElementById(id).value = '');
+        }
+
+        function login() {
+            const u = document.getElementById('loginUsername').value.trim();
+            const p = document.getElementById('loginPassword').value;
+            if (!u || !p) return alert('กรุณากรอกข้อมูลให้ครบ');
+            const d = localStorage.getItem(`user_${u}`);
+            if (!d) return alert('ไม่พบชื่อผู้ใช้');
+            if (JSON.parse(d).password !== p) return alert('รหัสผ่านไม่ถูกต้อง');
+            currentUser = u;
+            localStorage.setItem('currentUser', u);
+            loadHistory();
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+            document.getElementById('currentUsername').textContent = u;
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null; foodHistory = [];
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('foodResult').innerHTML = '';
+        }
+
+        function randomFood() {
+            const craving = document.getElementById('cravingSelect').value;
+            if (!craving) return alert('กรุณาเลือกประเภทอาหาร');
+            let food;
+            if (craving === 'สุ่มทั้งหมด') {
+                const cats = Object.keys(foodDatabase);
+                const f = foodDatabase[cats[Math.floor(Math.random() * cats.length)]];
+                food = f[Math.floor(Math.random() * f.length)];
+            } else {
+                const f = foodDatabase[craving];
+                food = f[Math.floor(Math.random() * f.length)];
+            }
+            showFoodCard(food);
+        }
+
+        function showFoodCard(food) {
+            const safe = JSON.stringify(food).replace(/"/g, '&quot;');
+            document.getElementById('foodResult').innerHTML = `
+        <div class="food-card">
+            <div class="food-name">${food.name}</div>
+            <div class="nutrition-row">
+                <div class="nut-box">
+                    <div class="nut-label">พลังงาน</div>
+                    <div class="nut-val">${food.calories}<small style="font-size:11px;font-weight:400;color:var(--muted)"> kcal</small></div>
+                </div>
+                <div class="nut-box">
+                    <div class="nut-label">โปรตีน</div>
+                    <div class="nut-val">${food.protein}<small style="font-size:11px;font-weight:400;color:var(--muted)"> g</small></div>
+                </div>
+                <div class="nut-box">
+                    <div class="nut-label">คาร์โบไฮเดรต</div>
+                    <div class="nut-val">${food.carbs}<small style="font-size:11px;font-weight:400;color:var(--muted)"> g</small></div>
+                </div>
+                <div class="nut-box">
+                    <div class="nut-label">ไขมัน</div>
+                    <div class="nut-val">${food.fat}<small style="font-size:11px;font-weight:400;color:var(--muted)"> g</small></div>
+                </div>
+            </div>
+            <div class="btn-pair">
+                <button class="btn btn-green" onclick='acceptFood(${safe})'>✓ กินเมนูนี้</button>
+                <button class="btn btn-red" onclick="randomFood()">✗ สุ่มใหม่</button>
+            </div>
+        </div>`;
+        }
+
+        function acceptFood(food) {
+            foodHistory.unshift({ ...food, timestamp: new Date().toISOString() });
+            if (foodHistory.length > 20) foodHistory = foodHistory.slice(0, 20);
+            localStorage.setItem(`history_${currentUser}`, JSON.stringify(foodHistory));
+            document.getElementById('foodResult').innerHTML = `
+        <div class="success-card">
+            <span class="check">✅</span>
+            <strong>${food.name}</strong>
+            <p>บันทึกในประวัติแล้ว</p>
+            <button class="btn btn-ghost" style="margin-top:16px" onclick="document.getElementById('foodResult').innerHTML='';document.getElementById('cravingSelect').value=''">สุ่มเมนูใหม่</button>
+        </div>`;
+        }
+
+        function loadHistory() {
+            const s = localStorage.getItem(`history_${currentUser}`);
+            foodHistory = s ? JSON.parse(s) : [];
+        }
+
+        function showMainTab(el) {
+            document.getElementById('mainTab').classList.remove('hidden');
+            document.getElementById('historyTab').classList.add('hidden');
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function showHistoryTab(el) {
+            document.getElementById('mainTab').classList.add('hidden');
+            document.getElementById('historyTab').classList.remove('hidden');
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const div = document.getElementById('historyList');
+            if (!foodHistory.length) {
+                div.innerHTML = '<div class="empty-state"><span class="icon">🍽️</span>ยังไม่มีประวัติการสุ่มเมนู</div>';
+                return;
+            }
+            div.innerHTML = foodHistory.map(item => {
+                const d = new Date(item.timestamp);
+                const ds = d.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                return `<div class="history-item">
+            <div class="h-name">${item.name}</div>
+            <div class="h-cal">${item.calories} kcal · โปรตีน ${item.protein}g · คาร์บ ${item.carbs}g · ไขมัน ${item.fat}g</div>
+            <div class="h-time">${ds}</div>
+        </div>`;
+            }).join('');
+        }
+
+        function clearHistory() {
+            if (!confirm('ล้างประวัติทั้งหมด?')) return;
+            foodHistory = [];
+            localStorage.removeItem(`history_${currentUser}`);
+            renderHistory();
+        }
+
+        // Dropdown
+        let selectedCraving = '';
+
+        function toggleDropdown() {
+            const trigger = document.getElementById('cravingTrigger');
+            const options = document.getElementById('cravingOptions');
+            trigger.classList.toggle('open');
+            options.classList.toggle('open');
+        }
+
+        function selectOption(el) {
+            const val = el.dataset.value;
+            selectedCraving = val;
+            document.getElementById('cravingSelect').value = val;
+            document.getElementById('cravingLabel').textContent = el.textContent;
+            document.getElementById('cravingTrigger').classList.add('selected');
+            document.getElementById('cravingTrigger').classList.remove('open');
+            document.getElementById('cravingOptions').classList.remove('open');
+            // mark active
+            document.querySelectorAll('.custom-option').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // Close dropdown on outside click
+        document.addEventListener('click', function (e) {
+            const dd = document.getElementById('cravingDropdown');
+            if (dd && !dd.contains(e.target)) {
+                document.getElementById('cravingTrigger').classList.remove('open');
+                document.getElementById('cravingOptions').classList.remove('open');
+            }
+        });
+
+        // Init
+        const saved = localStorage.getItem('currentUser');
+        if (saved) {
+            currentUser = saved; loadHistory();
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+            document.getElementById('currentUsername').textContent = currentUser;
+        }
+    </script>
+</body>
+
+</html>
